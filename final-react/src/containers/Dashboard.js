@@ -6,6 +6,8 @@ export default function Dashboard() {
   const [nFoodName, setNFoodName] = useState("");
   const [nFoodLink, setNFoodLink] = useState("");
   const [nFoodIngredients, setNFoodIngredients] = useState([]);
+  const [nIngName, setNIngName] = useState("");
+  const [nIngCategory, setNIngCategory] = useState("");
 
   const [foods, setFoods] = useState([
     { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
@@ -38,6 +40,21 @@ export default function Dashboard() {
       nFoodLink.length > 0 &&
       nFoodName.length > 0
     );
+  }
+  function handleCreateIng() {
+    setIngredients([
+      ...ingredients,
+      {
+        Id: ingredients.length,
+        Name: nIngName,
+        category: nIngCategory,
+      },
+    ]);
+    alert("New ingredient created");
+  }
+
+  function validateNewIng() {
+    return nIngName.length > 0 && nIngCategory.length > 0;
   }
 
   function onIngredientChange(e, name) {
@@ -180,7 +197,38 @@ export default function Dashboard() {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="3">
               <Card.Body>
-                <Card.Body></Card.Body>
+                <Card.Body>
+                  <div className="col-md-6">
+                    <Form onSubmit={handleCreateIng}>
+                      <Form.Group controlId="ingName" size="lg">
+                        <Form.Label>نام ماده غذایی</Form.Label>
+                        <Form.Control
+                          autoFocus
+                          type="text"
+                          value={nIngName}
+                          onChange={(e) => setNIngName(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="ingcategory" size="lg">
+                        <Form.Label>نوع ماده غذایی</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={nIngCategory}
+                          onChange={(e) => setNIngCategory(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Button
+                        block
+                        size="lg"
+                        type="submit"
+                        varient="success"
+                        disabled={!validateNewIng()}
+                      >
+                        اضافه کردن ماده غذایی به لیست
+                      </Button>
+                    </Form>
+                  </div>
+                </Card.Body>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
