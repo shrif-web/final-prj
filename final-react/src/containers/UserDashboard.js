@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Accordion, Card, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 import "./Home.css";
+var Parse = require('parse');
 
 export default function Dashboard() {
   const [Email, setEmail] = useState(["a@gmail.com"]);

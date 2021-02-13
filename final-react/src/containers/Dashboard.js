@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Accordion, Card, Table, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
+var Parse = require('parse');
 
 export default function Dashboard() {
   const [nFoodName, setNFoodName] = useState("");
@@ -20,17 +21,60 @@ export default function Dashboard() {
     { Id: "2", Name: "Ingredient 2", category: "dairy" },
     { Id: "3", Name: "Ingredient 3", category: "dairy" },
   ]);
+  
+  // const Ingredient = Parse.Object.extend("Ingredient");
+  // const query = new Parse.Query(Ingredient);
+  // query.equalTo("playerName", "Dan Stemkoski");
+  // const results = query.find();
+  // console.log(results.length);
+  // alert("Successfully retrieved " + results.length + " scores.");
+  // Do something with the returned Parse.Object values
+  // for (let i = 0; i < results.length; i++) {
+  //   const object = results[i];
+  //   alert(object.id + ' - ' + object.get('playerName'));
+  // }
 
-  function handleCreateFood() {
-    setFoods([
-      ...foods,
-      {
-        Id: foods.length,
-        Name: nFoodName,
-        link: nFoodLink,
-        Ingredients: nFoodIngredients.toString,
-      },
-    ]);
+
+
+  async function handleCreateFood() {
+    // setFoods([
+    //   ...foods,
+    //   {
+    //     Id: foods.length,
+    //     Name: nFoodName,
+    //     link: nFoodLink,
+    //     Ingredients: nFoodIngredients.toString,
+    //   },
+    // ]);
+ 
+    try {
+
+      const Food = Parse.Object.extend("Food");
+      const food = new Food();
+      food.set("name", nFoodName);
+      food.set("link", nFoodLink);
+      const relation = food.relation("ingredients");
+      var i;
+      for (i = 0; i < nFoodIngredients.length; i++) {
+        alert(2);
+        console.log(nFoodIngredients[i]);
+        const query = new Parse.Query("Ingredient");
+        query.equalTo("name", "tea");
+        // const result = await query.find();
+        alert("result");
+        query.find().then(
+          function(value) { alert("find");alert(value[0]);relation.add(value[0]);food.save();/* code if successful */ },
+          function(error) { alert(error.message); }
+        );
+        
+        // console.log("ingre -> ",result.length);
+      }
+      
+      
+      console.log("food saved.");
+    } catch (error) {
+      console.log(error.message);
+    }
     alert("New food created");
   }
 
@@ -41,15 +85,17 @@ export default function Dashboard() {
       nFoodName.length > 0
     );
   }
-  function handleCreateIng() {
-    setIngredients([
-      ...ingredients,
-      {
-        Id: ingredients.length,
-        Name: nIngName,
-        category: nIngCategory,
-      },
-    ]);
+  async function handleCreateIng() {
+
+    try{
+      const Ingredient = Parse.Object.extend("Ingredient");
+      const ingredient = new Ingredient();
+      ingredient.set("name", nIngName);
+      ingredient.set("type", nIngCategory);
+      await ingredient.save();
+    }catch(error){
+      console.log(error.message);
+    }
     alert("New ingredient created");
   }
 
@@ -58,6 +104,7 @@ export default function Dashboard() {
   }
 
   function onIngredientChange(e, name) {
+    console.log("------------------------> hi");
     if (nFoodIngredients.includes(name)) {
       var arr = nFoodIngredients.filter(function (item) {
         return item !== name;
