@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Accordion, Card, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 import "./Home.css";
-var Parse = require('parse');
+
+import Parse from "../Parse.js";
 
 export default function Dashboard() {
+
+
   const [Email, setEmail] = useState(["a@gmail.com"]);
   const [Password, setPassword] = useState("aaaa");
 
-  const [favoriteFoods, setFFoods] = useState([
+  const [favoriteFoods, setFoods] = useState([
     {
       Name: "food 1",
       link: "www.google.com",
@@ -43,6 +46,31 @@ export default function Dashboard() {
   function validateNewPassword() {
     return newPassword.length > 0 && Password === confirmedPassword;
   }
+   
+  async function onLoad(){
+    console.log(Parse.User.current().getSessionToken());
+
+    const favorits = Parse.Object.extend("Favorit");
+
+    const query = new Parse.Query(favorits);
+
+    query.equalTo("userID", Parse.User.current().getUsername());
+
+    query.find().then((resp) => {
+      const fd = resp.map((x) => ({
+        Name: x.get("Name"),
+        link: x.get("Link"),
+        Ingredients: x.get("Indredients"),
+        src: x.get("imagesrc"),
+      }));
+      setFoods(fd);
+    });
+
+  }
+  useEffect(() => {
+    onLoad();
+  }, []);
+
 
   return (
     <div className="Dashboard">

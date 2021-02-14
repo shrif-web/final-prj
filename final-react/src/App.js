@@ -4,9 +4,10 @@ import Routes from "./Routes";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import Cookies from "js-cookie";
 import "./App.css";
-var Parse = require('parse');
-Parse.initialize("myAppId");
-Parse.serverURL = 'http://localhost:1337/parse'
+
+// var Parse = require('parse');
+// Parse.initialize("myAppId");
+// Parse.serverURL = 'http://localhost:1337/parse'
 
 function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
