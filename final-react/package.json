@@ -15,7 +15,10 @@
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-bootstrap-typeahead": "^5.1.4",
+<<<<<<< HEAD
     "react-bootstrap-validation": "^0.1.11",
+=======
+>>>>>>> fe1cd8c1e5c5d474cd32c9526291c047e61a4660
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-icons": "^3.11.0",

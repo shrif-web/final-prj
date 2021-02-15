@@ -4,6 +4,49 @@ import "./Dashboard.css";
 
 import Parse from "../Parse.js";
 
+<<<<<<< HEAD
+=======
+export default function Dashboard() {
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function onLoad() {
+    console.log("hi");
+    const Ingredient = Parse.Object.extend("Ingredient");
+    const query = new Parse.Query(Ingredient);
+    const results = await query.find();
+    console.log(results.length);
+    var mIngredients = []
+    for (let i = 0; i < results.length; i++) {
+      const object = results[i];
+      mIngredients[i]={Id:i+1,Name:object.get("name"),category:object.get("type")};
+    }
+    setIngredients(mIngredients);
+
+    const Food = Parse.Object.extend("Food");
+    const query2 = new Parse.Query(Food);
+    const results2 = await query2.find();
+    console.log(results2.length);
+    var mFoods = []
+    for (let i = 0; i < results2.length; i++) {
+      const object = results2[i];
+      var ingredients2 = object.relation("ingredients");
+      ingredients2 = await ingredients2.query().find();
+      var j=0;
+      var mstr = "";
+      for(let j = 0; j < ingredients2.length; j++){
+        mstr=mstr+' - '+ingredients2[j].get("name");
+      }
+      mstr = mstr.substring(2,mstr.length);
+      mFoods[i]={Id:i+1,Name:object.get("name"),link:object.get("link"),Ingredients:mstr};
+      
+    }
+    setFoods(mFoods);
+
+  }
+>>>>>>> fe1cd8c1e5c5d474cd32c9526291c047e61a4660
 
 export default function Dashboard() {
   const [nFoodName, setNFoodName] = useState("");
@@ -11,7 +54,9 @@ export default function Dashboard() {
   const [nFoodIngredients, setNFoodIngredients] = useState([]);
   const [nIngName, setNIngName] = useState("");
   const [nIngCategory, setNIngCategory] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
+<<<<<<< HEAD
   const [foods, setFoods] = useState([
     { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
     { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
@@ -34,6 +79,62 @@ export default function Dashboard() {
         Ingredients: nFoodIngredients.toString,
       },
     ]);
+=======
+  const [foods, setFoods] = useState([]);
+  //   { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
+  //   { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
+  //   { Id: "3", Name: "food 3", link: "www.google.com", Ingredients: "egg" },
+  // ]);
+
+  const [ingredients, setIngredients] = useState([{}]);
+  // ([
+  //   { Id: "1", Name: "Ingredient 1", category: "dairy" },
+  //   { Id: "2", Name: "Ingredient 2", category: "dairy" },
+  //   { Id: "3", Name: "Ingredient 3", category: "dairy" },
+  // ]);
+ 
+
+
+
+  async function handleCreateFood() {
+
+    try {
+
+      var Food = Parse.Object.extend("Food");
+      var food = new Food();
+      food.set("name", nFoodName);
+      food.set("link", nFoodLink);
+      // console.log("file -> ", selectedFile);
+      // alert(selectedFile);
+      // const parseFile = new Parse.File(selectedFile.name,selectedFile);
+      // food.set("image",)
+      var relation = food.relation("ingredients");
+      var query = new Parse.Query("Ingredient");
+      query.containedIn("name",nFoodIngredients);
+      alert("start");
+      // var results = await query.find();
+      query.find().then(results => {
+        alert("res -> ",results.length);
+        relation.add(results);
+        food.save().then(
+          results => {
+            alert("food saved! ");
+            
+        }).catch(error2 => {
+            alert(error2);
+        });
+    }).catch(error => {
+        alert(error);
+    });
+      // console.log(results);
+      // alert("result");
+      // await food.save();
+      // alert("food saved.");
+
+    } catch (error) {
+      alert("error ---> ",error.message);
+    }
+>>>>>>> fe1cd8c1e5c5d474cd32c9526291c047e61a4660
     alert("New food created");
   }
 
@@ -70,7 +171,9 @@ export default function Dashboard() {
       setNFoodIngredients([...nFoodIngredients, name]);
     }
   }
-
+  function onFileChange (event){
+    setSelectedFile(event.target.files[0]);
+  };
   return (
     <div className="Dashboard">
       <h1 style={{ paddingTop: "10%" }}>It's Admin Dashboard</h1>
@@ -148,7 +251,11 @@ export default function Dashboard() {
                         ))}
                       </Form.Group>
                       <Form.Group>
-                        <Form.File id="foodImage" label="فایل تصویر غذا" />
+                        <Form.File 
+                        id="foodImage" 
+                        label="فایل تصویر غذا"
+                        onChange={onFileChange}
+                         />
                       </Form.Group>
                       <Button
                         block
