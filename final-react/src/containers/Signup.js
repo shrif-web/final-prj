@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import { useAppContext } from "../libs/contextLib";
 import Cookies from "js-cookie";
 import "./Signup.css";
-var Parse = require('parse');
 
 export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
