@@ -34,8 +34,9 @@ export default function Dashboard() {
       var j=0;
       var mstr = "";
       for(let j = 0; j < ingredients2.length; j++){
-        mstr=mstr+' '+ingredients2[j].get("name");
+        mstr=mstr+' - '+ingredients2[j].get("name");
       }
+      mstr = mstr.substring(2,mstr.length);
       mFoods[i]={Id:i+1,Name:object.get("name"),link:object.get("link"),Ingredients:mstr};
       
     }
@@ -48,6 +49,7 @@ export default function Dashboard() {
   const [nFoodIngredients, setNFoodIngredients] = useState([]);
   const [nIngName, setNIngName] = useState("");
   const [nIngCategory, setNIngCategory] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [foods, setFoods] = useState([]);
   //   { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
@@ -66,53 +68,40 @@ export default function Dashboard() {
 
 
   async function handleCreateFood() {
-    // setFoods([
-    //   ...foods,
-    //   {
-    //     Id: foods.length,
-    //     Name: nFoodName,
-    //     link: nFoodLink,
-    //     Ingredients: nFoodIngredients.toString,
-    //   },
-    // ]);
- 
+
     try {
 
-      const Food = Parse.Object.extend("Food");
-      const food = new Food();
+      var Food = Parse.Object.extend("Food");
+      var food = new Food();
       food.set("name", nFoodName);
       food.set("link", nFoodLink);
-      const relation = food.relation("ingredients");
-      var i;
-      for (i = 0; i < nFoodIngredients.length; i++) {
-        alert("start");
-        console.log(nFoodIngredients[i]);
-        var query = new Parse.Query("Ingredient");
-        alert(nFoodIngredients[i]);
-        query.equalTo("name", nFoodIngredients[i]);
-        // const result = await query.find();
-        alert("result");
-        // query.find().then(
-        //   function(value) { alert("find");alert(value[0]);relation.add(value[0]);/* code if successful */ },
-        //   function(error) { alert(error.message); }
-        // );
-        var result;
-        try{
-        result = await query.find()
-        }
-        catch{
-          alert('me')
-        }
-             alert("find");
-             alert(result);
-             relation.add(result[0]);/* code if successful */ 
+      // console.log("file -> ", selectedFile);
+      // alert(selectedFile);
+      // const parseFile = new Parse.File(selectedFile.name,selectedFile);
+      // food.set("image",)
+      var relation = food.relation("ingredients");
+      var query = new Parse.Query("Ingredient");
+      query.containedIn("name",nFoodIngredients);
+      alert("start");
+      // var results = await query.find();
+      query.find().then(results => {
+        alert("res -> ",results.length);
+        relation.add(results);
+        food.save().then(
+          results => {
+            alert("food saved! ");
             
-        // console.log("ingre -> ",result.length);
-      }
-      
-      await food.save();
-      
-      alert("food saved.");
+        }).catch(error2 => {
+            alert(error2);
+        });
+    }).catch(error => {
+        alert(error);
+    });
+      // console.log(results);
+      // alert("result");
+      // await food.save();
+      // alert("food saved.");
+
     } catch (error) {
       alert("error ---> ",error.message);
     }
@@ -155,7 +144,9 @@ export default function Dashboard() {
       setNFoodIngredients([...nFoodIngredients, name]);
     }
   }
-
+  function onFileChange (event){
+    setSelectedFile(event.target.files[0]);
+  };
   return (
     <div className="Dashboard">
       <h1 style={{ paddingTop: "10%" }}>It's Admin Dashboard</h1>
@@ -233,7 +224,11 @@ export default function Dashboard() {
                         ))}
                       </Form.Group>
                       <Form.Group>
-                        <Form.File id="foodImage" label="فایل تصویر غذا" />
+                        <Form.File 
+                        id="foodImage" 
+                        label="فایل تصویر غذا"
+                        onChange={onFileChange}
+                         />
                       </Form.Group>
                       <Button
                         block
