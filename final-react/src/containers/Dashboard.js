@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Accordion, Card, Table, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 
 import Parse from "../Parse.js";
 
-<<<<<<< HEAD
-=======
 export default function Dashboard() {
-
   useEffect(() => {
     onLoad();
   }, []);
@@ -18,10 +15,14 @@ export default function Dashboard() {
     const query = new Parse.Query(Ingredient);
     const results = await query.find();
     console.log(results.length);
-    var mIngredients = []
+    var mIngredients = [];
     for (let i = 0; i < results.length; i++) {
       const object = results[i];
-      mIngredients[i]={Id:i+1,Name:object.get("name"),category:object.get("type")};
+      mIngredients[i] = {
+        Id: i + 1,
+        Name: object.get("name"),
+        category: object.get("type"),
+      };
     }
     setIngredients(mIngredients);
 
@@ -29,26 +30,27 @@ export default function Dashboard() {
     const query2 = new Parse.Query(Food);
     const results2 = await query2.find();
     console.log(results2.length);
-    var mFoods = []
+    var mFoods = [];
     for (let i = 0; i < results2.length; i++) {
       const object = results2[i];
       var ingredients2 = object.relation("ingredients");
       ingredients2 = await ingredients2.query().find();
-      var j=0;
+      var j = 0;
       var mstr = "";
-      for(let j = 0; j < ingredients2.length; j++){
-        mstr=mstr+' - '+ingredients2[j].get("name");
+      for (let j = 0; j < ingredients2.length; j++) {
+        mstr = mstr + " - " + ingredients2[j].get("name");
       }
-      mstr = mstr.substring(2,mstr.length);
-      mFoods[i]={Id:i+1,Name:object.get("name"),link:object.get("link"),Ingredients:mstr};
-      
+      mstr = mstr.substring(2, mstr.length);
+      mFoods[i] = {
+        Id: i + 1,
+        Name: object.get("name"),
+        link: object.get("link"),
+        Ingredients: mstr,
+      };
     }
     setFoods(mFoods);
-
   }
->>>>>>> fe1cd8c1e5c5d474cd32c9526291c047e61a4660
 
-export default function Dashboard() {
   const [nFoodName, setNFoodName] = useState("");
   const [nFoodLink, setNFoodLink] = useState("");
   const [nFoodIngredients, setNFoodIngredients] = useState([]);
@@ -56,30 +58,6 @@ export default function Dashboard() {
   const [nIngCategory, setNIngCategory] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
-<<<<<<< HEAD
-  const [foods, setFoods] = useState([
-    { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
-    { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
-    { Id: "3", Name: "food 3", link: "www.google.com", Ingredients: "egg" },
-  ]);
-
-  const [ingredients, setIngredients] = useState([
-    { Id: "1", Name: "Ingredient 1", category: "dairy" },
-    { Id: "2", Name: "Ingredient 2", category: "dairy" },
-    { Id: "3", Name: "Ingredient 3", category: "dairy" },
-  ]);
-
-  function handleCreateFood() {
-    setFoods([
-      ...foods,
-      {
-        Id: foods.length,
-        Name: nFoodName,
-        link: nFoodLink,
-        Ingredients: nFoodIngredients.toString,
-      },
-    ]);
-=======
   const [foods, setFoods] = useState([]);
   //   { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
   //   { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
@@ -92,14 +70,9 @@ export default function Dashboard() {
   //   { Id: "2", Name: "Ingredient 2", category: "dairy" },
   //   { Id: "3", Name: "Ingredient 3", category: "dairy" },
   // ]);
- 
-
-
 
   async function handleCreateFood() {
-
     try {
-
       var Food = Parse.Object.extend("Food");
       var food = new Food();
       food.set("name", nFoodName);
@@ -110,31 +83,33 @@ export default function Dashboard() {
       // food.set("image",)
       var relation = food.relation("ingredients");
       var query = new Parse.Query("Ingredient");
-      query.containedIn("name",nFoodIngredients);
+      query.containedIn("name", nFoodIngredients);
       alert("start");
       // var results = await query.find();
-      query.find().then(results => {
-        alert("res -> ",results.length);
-        relation.add(results);
-        food.save().then(
-          results => {
-            alert("food saved! ");
-            
-        }).catch(error2 => {
-            alert(error2);
+      query
+        .find()
+        .then((results) => {
+          alert("res -> ", results.length);
+          relation.add(results);
+          food
+            .save()
+            .then((results) => {
+              alert("food saved! ");
+            })
+            .catch((error2) => {
+              alert(error2);
+            });
+        })
+        .catch((error) => {
+          alert(error);
         });
-    }).catch(error => {
-        alert(error);
-    });
       // console.log(results);
       // alert("result");
       // await food.save();
       // alert("food saved.");
-
     } catch (error) {
-      alert("error ---> ",error.message);
+      alert("error ---> ", error.message);
     }
->>>>>>> fe1cd8c1e5c5d474cd32c9526291c047e61a4660
     alert("New food created");
   }
 
@@ -145,15 +120,16 @@ export default function Dashboard() {
       nFoodName.length > 0
     );
   }
-  function handleCreateIng() {
-    setIngredients([
-      ...ingredients,
-      {
-        Id: ingredients.length,
-        Name: nIngName,
-        category: nIngCategory,
-      },
-    ]);
+  async function handleCreateIng() {
+    try {
+      const Ingredient = Parse.Object.extend("Ingredient");
+      const ingredient = new Ingredient();
+      ingredient.set("name", nIngName);
+      ingredient.set("type", nIngCategory);
+      await ingredient.save();
+    } catch (error) {
+      console.log(error.message);
+    }
     alert("New ingredient created");
   }
 
@@ -162,6 +138,7 @@ export default function Dashboard() {
   }
 
   function onIngredientChange(e, name) {
+    console.log("------------------------> hi");
     if (nFoodIngredients.includes(name)) {
       var arr = nFoodIngredients.filter(function (item) {
         return item !== name;
@@ -171,9 +148,9 @@ export default function Dashboard() {
       setNFoodIngredients([...nFoodIngredients, name]);
     }
   }
-  function onFileChange (event){
+  function onFileChange(event) {
     setSelectedFile(event.target.files[0]);
-  };
+  }
   return (
     <div className="Dashboard">
       <h1 style={{ paddingTop: "10%" }}>It's Admin Dashboard</h1>
@@ -251,11 +228,11 @@ export default function Dashboard() {
                         ))}
                       </Form.Group>
                       <Form.Group>
-                        <Form.File 
-                        id="foodImage" 
-                        label="فایل تصویر غذا"
-                        onChange={onFileChange}
-                         />
+                        <Form.File
+                          id="foodImage"
+                          label="فایل تصویر غذا"
+                          onChange={onFileChange}
+                        />
                       </Form.Group>
                       <Button
                         block
