@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Accordion, Card, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 import "./Home.css";
+
+import Parse from "../Parse.js";
 
 export default function Dashboard() {
 
@@ -10,7 +12,6 @@ export default function Dashboard() {
   const [Password, setPassword] = useState("aaaa");
 
   const [favoriteFoods, setFoods] = useState([]);
- 
   const [newEmail, setNEmail] = useState("");
   const [newPassword, setNPassword] = useState("");
   const [confirmedPassword, setCPassword] = useState("");
@@ -61,7 +62,6 @@ export default function Dashboard() {
     });
 
   }, []);
-
 
 
   return (

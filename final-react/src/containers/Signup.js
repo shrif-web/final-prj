@@ -8,6 +8,7 @@ import "./Signup.css";
 
 import Parse from "../Parse.js";
 
+
 export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
     username: "",
