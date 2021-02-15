@@ -8,23 +8,10 @@ import Parse from "../Parse.js";
 export default function Dashboard() {
 
 
-  const [Email, setEmail] = useState(["a@gmail.com"]);
+  const [Email, setEmail] = useState(Parse.User.current().getUsername());
   const [Password, setPassword] = useState("aaaa");
 
-  const [favoriteFoods, setFoods] = useState([
-    {
-      Name: "food 1",
-      link: "www.google.com",
-      Ingredients: "egg",
-      src: "./d3.jpg",
-    },
-    {
-      Name: "food 2",
-      link: "www.google.com",
-      Ingredients: "egg",
-      src: "./d2.jpg",
-    },
-  ]);
+  const [favoriteFoods, setFoods] = useState([]);
   const [newEmail, setNEmail] = useState("");
   const [newPassword, setNPassword] = useState("");
   const [confirmedPassword, setCPassword] = useState("");
@@ -47,28 +34,33 @@ export default function Dashboard() {
     return newPassword.length > 0 && Password === confirmedPassword;
   }
    
-  async function onLoad(){
-    console.log(Parse.User.current().getSessionToken());
-
+  
+  useEffect(() => {
+      
     const favorits = Parse.Object.extend("Favorit");
 
     const query = new Parse.Query(favorits);
 
-    query.equalTo("userID", Parse.User.current().getUsername());
+    query.equalTo("username", Parse.User.current().getUsername());
 
     query.find().then((resp) => {
-      const fd = resp.map((x) => ({
-        Name: x.get("Name"),
-        link: x.get("Link"),
-        Ingredients: x.get("Indredients"),
-        src: x.get("imagesrc"),
-      }));
+      
+      const fd = resp.map((x) => {
+        
+        const food = x.get("food");
+        return {
+            Name : food.Name,
+            Link : food.Link,
+            Ingredients : food.Ingredients,
+            src:food.imagesrc
+         }
+      });
       setFoods(fd);
+
+      console.log(fd);
+
     });
 
-  }
-  useEffect(() => {
-    onLoad();
   }, []);
 
 
@@ -190,7 +182,7 @@ export default function Dashboard() {
                       height: "auto",
                     }}
                   >
-                    <img alt="" src={food.src} />
+                    <img  alt="" src={food.src} />
 
                     <div className="box-content">
                       <h3 className="title">{food.Name}</h3>

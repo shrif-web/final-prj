@@ -3,22 +3,43 @@ import { useAppContext } from "../libs/contextLib";
 import { Form, Button, Alert } from "react-bootstrap";
 import Cookies from "js-cookie";
 import "./Login.css";
+import { useHistory } from "react-router-dom";
+
+
+import Parse from "../Parse.js";
+
 
 export default function Login() {
   const { userHasAuthenticated } = useAppContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState([]);
+  const history = useHistory();
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
   }
 
   async function handleSubmit(event) {
+    // event.preventDefault();
+    // userHasAuthenticated(true);
+    // Cookies.set("user", "true");
+    // alert("Logged in");
+
     event.preventDefault();
-    userHasAuthenticated(true);
-    Cookies.set("user", "true");
-    alert("Logged in");
+    //
+    // alert("log in!");
+
+    try {
+      const user = await Parse.User.logIn(username, password);
+      console.log("login successfully");
+      userHasAuthenticated(true);
+      Cookies.set("user", username);
+     // history.push("/dashboard");
+    } catch (error) {
+      console.log("wrong email or password.");
+      setError("wrong email or password");
+    }
   }
 
   function handleClose() {

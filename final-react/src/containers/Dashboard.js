@@ -1,7 +1,8 @@
 import React, { useState, useEffect  } from "react";
 import { Accordion, Card, Table, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
-var Parse = require('parse');
+
+import Parse from "../Parse.js";
 
 export default function Dashboard() {
 
