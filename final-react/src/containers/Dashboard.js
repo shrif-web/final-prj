@@ -1,122 +1,39 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState } from "react";
 import { Accordion, Card, Table, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 
 import Parse from "../Parse.js";
 
+
 export default function Dashboard() {
-
-  useEffect(() => {
-    onLoad();
-  }, []);
-
-  async function onLoad() {
-    console.log("hi");
-    const Ingredient = Parse.Object.extend("Ingredient");
-    const query = new Parse.Query(Ingredient);
-    const results = await query.find();
-    console.log(results.length);
-    var mIngredients = []
-    for (let i = 0; i < results.length; i++) {
-      const object = results[i];
-      mIngredients[i]={Id:i+1,Name:object.get("name"),category:object.get("type")};
-    }
-    setIngredients(mIngredients);
-
-    const Food = Parse.Object.extend("Food");
-    const query2 = new Parse.Query(Food);
-    const results2 = await query2.find();
-    console.log(results2.length);
-    var mFoods = []
-    for (let i = 0; i < results2.length; i++) {
-      const object = results2[i];
-      var ingredients2 = object.relation("ingredients");
-      ingredients2 = await ingredients2.query().find();
-      var j=0;
-      var mstr = "";
-      for(let j = 0; j < ingredients2.length; j++){
-        mstr=mstr+' '+ingredients2[j].get("name");
-      }
-      mFoods[i]={Id:i+1,Name:object.get("name"),link:object.get("link"),Ingredients:mstr};
-      
-    }
-    setFoods(mFoods);
-
-  }
-
   const [nFoodName, setNFoodName] = useState("");
   const [nFoodLink, setNFoodLink] = useState("");
   const [nFoodIngredients, setNFoodIngredients] = useState([]);
   const [nIngName, setNIngName] = useState("");
   const [nIngCategory, setNIngCategory] = useState("");
 
-  const [foods, setFoods] = useState([]);
-  //   { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
-  //   { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
-  //   { Id: "3", Name: "food 3", link: "www.google.com", Ingredients: "egg" },
-  // ]);
+  const [foods, setFoods] = useState([
+    { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
+    { Id: "2", Name: "food 2", link: "www.google.com", Ingredients: "egg" },
+    { Id: "3", Name: "food 3", link: "www.google.com", Ingredients: "egg" },
+  ]);
 
-  const [ingredients, setIngredients] = useState([{}]);
-  // ([
-  //   { Id: "1", Name: "Ingredient 1", category: "dairy" },
-  //   { Id: "2", Name: "Ingredient 2", category: "dairy" },
-  //   { Id: "3", Name: "Ingredient 3", category: "dairy" },
-  // ]);
- 
+  const [ingredients, setIngredients] = useState([
+    { Id: "1", Name: "Ingredient 1", category: "dairy" },
+    { Id: "2", Name: "Ingredient 2", category: "dairy" },
+    { Id: "3", Name: "Ingredient 3", category: "dairy" },
+  ]);
 
-
-
-  async function handleCreateFood() {
-    // setFoods([
-    //   ...foods,
-    //   {
-    //     Id: foods.length,
-    //     Name: nFoodName,
-    //     link: nFoodLink,
-    //     Ingredients: nFoodIngredients.toString,
-    //   },
-    // ]);
- 
-    try {
-
-      const Food = Parse.Object.extend("Food");
-      const food = new Food();
-      food.set("name", nFoodName);
-      food.set("link", nFoodLink);
-      const relation = food.relation("ingredients");
-      var i;
-      for (i = 0; i < nFoodIngredients.length; i++) {
-        alert("start");
-        console.log(nFoodIngredients[i]);
-        var query = new Parse.Query("Ingredient");
-        alert(nFoodIngredients[i]);
-        query.equalTo("name", nFoodIngredients[i]);
-        // const result = await query.find();
-        alert("result");
-        // query.find().then(
-        //   function(value) { alert("find");alert(value[0]);relation.add(value[0]);/* code if successful */ },
-        //   function(error) { alert(error.message); }
-        // );
-        var result;
-        try{
-        result = await query.find()
-        }
-        catch{
-          alert('me')
-        }
-             alert("find");
-             alert(result);
-             relation.add(result[0]);/* code if successful */ 
-            
-        // console.log("ingre -> ",result.length);
-      }
-      
-      await food.save();
-      
-      alert("food saved.");
-    } catch (error) {
-      alert("error ---> ",error.message);
-    }
+  function handleCreateFood() {
+    setFoods([
+      ...foods,
+      {
+        Id: foods.length,
+        Name: nFoodName,
+        link: nFoodLink,
+        Ingredients: nFoodIngredients.toString,
+      },
+    ]);
     alert("New food created");
   }
 
@@ -127,17 +44,15 @@ export default function Dashboard() {
       nFoodName.length > 0
     );
   }
-  async function handleCreateIng() {
-
-    try{
-      const Ingredient = Parse.Object.extend("Ingredient");
-      const ingredient = new Ingredient();
-      ingredient.set("name", nIngName);
-      ingredient.set("type", nIngCategory);
-      await ingredient.save();
-    }catch(error){
-      console.log(error.message);
-    }
+  function handleCreateIng() {
+    setIngredients([
+      ...ingredients,
+      {
+        Id: ingredients.length,
+        Name: nIngName,
+        category: nIngCategory,
+      },
+    ]);
     alert("New ingredient created");
   }
 
@@ -146,7 +61,6 @@ export default function Dashboard() {
   }
 
   function onIngredientChange(e, name) {
-    console.log("------------------------> hi");
     if (nFoodIngredients.includes(name)) {
       var arr = nFoodIngredients.filter(function (item) {
         return item !== name;
