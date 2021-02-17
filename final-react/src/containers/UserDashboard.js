@@ -11,7 +11,7 @@ export default function Dashboard() {
 
   const [Email, setEmail] = useState(Parse.User.current().getUsername());
   const [Password, setPassword] = useState("aaaa");
-
+ 
   const [favoriteFoods, setFoods] = useState([]);
   const [newEmail, setNEmail] = useState("");
   const [newPassword, setNPassword] = useState("");
@@ -76,10 +76,12 @@ export default function Dashboard() {
       
       const fd = resp.map((x) => {
         
+        
         const food = x.get("food");
+      
         return {
-            Name : food.name,
-            Link : food.Link,
+            Name : food.Name,
+            link : food.link,
             Ingredients : food.Ingredients,
             src:food.imagesrc,
             id:x.id
@@ -226,7 +228,7 @@ export default function Dashboard() {
                         </button>
                       </li>
                       <li>
-                        <a href={food.Link}>
+                        <a href={food.link}>
                           <i className="fa fa-link"></i>
                         </a>
                       </li>

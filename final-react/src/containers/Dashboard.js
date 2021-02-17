@@ -51,6 +51,7 @@ export default function Dashboard() {
   const [nIngName, setNIngName] = useState("");
   const [nIngCategory, setNIngCategory] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [src , setSrc] = useState("");
 
   const [foods, setFoods] = useState([]);
   //   { Id: "1", Name: "food 1", link: "www.google.com", Ingredients: "egg" },
@@ -76,21 +77,17 @@ export default function Dashboard() {
       var food = new Food();
       food.set("name", nFoodName);
       food.set("link", nFoodLink);
-      // console.log("file -> ", selectedFile);
-      // alert(selectedFile);
-      // const parseFile = new Parse.File(selectedFile.name,selectedFile);
-      // food.set("image",)
+      food.set("imagesrc" ,  src);
+      food.set("score" ,0);
+
       var relation = food.relation("ingredients");
       var query = new Parse.Query("Ingredient");
       query.containedIn("name",nFoodIngredients);
-      // alert("start");
-      // var results = await query.find();
+     
       query.find().then(results => {
-        // alert("res -> ",results.length);
         relation.add(results);
         food.save().then(
           results => {
-            // alert("food saved! ");
             window.location.reload();
             
         }).catch(error2 => {
@@ -99,11 +96,7 @@ export default function Dashboard() {
     }).catch(error => {
         alert(error);
     });
-      // console.log(results);
-      // alert("result");
-      // await food.save();
-      // alert("food saved.");
-
+  
     } catch (error) {
       alert("error ---> ",error.message);
     }
@@ -177,6 +170,7 @@ export default function Dashboard() {
                       <th>نام غذا</th>
                       <th>لینک دستور غذایی</th>
                       <th>مواد اولیه</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -220,6 +214,14 @@ export default function Dashboard() {
                           type="text"
                           value={nFoodLink}
                           onChange={(e) => setNFoodLink(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="foodLink" size="lg">
+                        <Form.Label>لینک عکس غذا</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={src}
+                          onChange={(e) => setSrc(e.target.value)}
                         />
                       </Form.Group>
                       <Form.Group controlId="foodIngredients" size="lg">

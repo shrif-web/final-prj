@@ -13,6 +13,7 @@ export default function Search() {
   }, []);
 
   async function onLoad() {
+
     const Food = Parse.Object.extend("Food");
     const query = new Parse.Query(Food);
     const results = await query.find();
@@ -57,7 +58,7 @@ export default function Search() {
   const [foodName, setFoodName] = useState("");
 
   const [ingredients, setIngredients] = useState([]);
-  
+  const [foodObjects,setFoodObjects]=useState([]);
 
   function onIngredientChange(e, name) {
     if (searchIngs.includes(name)) {
@@ -91,19 +92,21 @@ export default function Search() {
       mstr=mstr+' - '+ingredients2[j].get("name");
     }
     mstr = mstr.substring(2,mstr.length);
-
+    setFoodObjects([results[0]])
     // try{
     setFoods([{
       Name: results[0].get("name"),
       link: results[0].get("link"),
       Ingredients: mstr,
-      src: "./d3.jpg",}]);
+      src: results[0].get('imagesrc'),
+      score:results[0].get("score")}
+    ]);
     
   }
 
   async function handleSearchByCheck() {
-    // alert(searchIngs[0]);
-    // alert("Search by ings");
+
+
     var allSelectedFood = []
     var i;
     var foods =[];
@@ -112,11 +115,11 @@ export default function Search() {
       const Ingredient = Parse.Object.extend("Ingredient");
       const query = new Parse.Query(Food);
       const innerQuery = new Parse.Query(Ingredient);
-      // alert(2);
+
       innerQuery.equalTo("name",searchIngs[i]);
       query.matchesQuery("ingredients",innerQuery);
       const res = await query.find();
-      // alert(3);
+
       var i;
       for(i=0; i<res.length;i++){
         var ingredients2 = res[i].relation("ingredients");
@@ -132,18 +135,15 @@ export default function Search() {
         Name: res[i].get("name"),
         link: res[i].get("link"),
         Ingredients: mstr,
-        src: "./d3.jpg"});
+        src: res[i].get('imagesrc')});
       
   
       console.log(res);
 
       }
-    }
-      // innerQuery.exists("image");
+      setFoodObjects(res);
 
-      // query.matchesQuery("post", innerQuery);
-      // // comments now contains the comments for posts with images.
-      // const comments = await query.find();
+    }
       setFoods(foods);
   }
 
@@ -155,6 +155,23 @@ export default function Search() {
     return searchIngs.length > 0;
   }
 
+
+  function addtofavorit(idx){
+
+    const f = foodObjects[idx];
+    const new_score = f.get('score') +1;
+    f.set('score',new_score);
+    f.save();
+
+    const favorit = Parse.Object.extend("Favorit");
+    var fav = new favorit();
+    fav.set("username",Parse.User.current().getUsername());
+    fav.set("food" , resultFoods[idx]);
+    fav.save();
+
+
+
+  }
   return (
     <div className="Search container-fluid">
       <h1 style={{ paddingTop: "10%", textAlign: "center", color: "white" }}>
@@ -260,9 +277,11 @@ export default function Search() {
                     </div>
                     <ul className="icon">
                       <li>
-                        <a href="/">
+                        <button  onClick={function(){
+                          addtofavorit(index)
+                        }}>
                           <i className="fa fa-minus"></i>
-                        </a>
+                        </button>
                       </li>
                       <li>
                         <a href="/">
