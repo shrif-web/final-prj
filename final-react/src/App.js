@@ -29,15 +29,16 @@ function App() {
   }
 
   function handledashboard(){
+    //here
 
-    if (Parse.User.current().get('isAdmin') ==  true)
-    {
+    // if (Parse.User.current().get('isAdmin') ==  true)
+    // {
       
-      history.push("./dashboard");
-      return 
-    }
+    //   history.push("./dashboard");
+    //   return 
+    // }
 
-    history.push("/user-dashboard")
+    // history.push("/user-dashboard")
   }
 
   return (
@@ -47,7 +48,7 @@ function App() {
           fixed="top"
           collapseOnSelect
           bg="white"
-          expand="sm"
+          expand="lg"
           className="navbar-light mb-3"
         >
           <Navbar.Brand href="/" className="font-weight-bold">
@@ -62,6 +63,10 @@ function App() {
 
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
+          <Nav style={{marginLeft:"70vw", fontSize:"0.8em"}}>
+            <Nav.Link href="/">صفحه اصلی</Nav.Link>
+            <Nav.Link href="/search">صفحه جستجو</Nav.Link>
+          </Nav>
             <Nav>
               {isAuthenticated ? (
                 <>

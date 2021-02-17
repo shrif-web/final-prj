@@ -30,6 +30,7 @@ export default function Signup() {
   }
 
   async function handleSubmit(event) {
+    
     event.preventDefault();
     const user = new Parse.User();
     user.set("password", fields.password);
@@ -48,6 +49,8 @@ export default function Signup() {
       console.log(error.message);
       setError(["Faild!"]);
     }
+
+
   }
 
   function handleClose() {
@@ -55,7 +58,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="Signup ">
+    <div className="Signup">
       <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 pt-3" id="alert">
         {error.map((msg, index) => (
           <Alert variant="danger" key={index} onClose={handleClose} dismissible>
@@ -71,6 +74,8 @@ export default function Signup() {
           marginTop: "15vh",
           backgroundColor: "white",
           padding: "25px",
+          borderRadius: "20px",
+          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
         }}
       >
         <Form.Group controlId="username" size="lg">

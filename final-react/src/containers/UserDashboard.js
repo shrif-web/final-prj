@@ -1,5 +1,7 @@
 import React, { useEffect ,useState } from "react";
 import { Accordion, Card, Form, Button } from "react-bootstrap";
+import UserDashboardHeader from "../components/UserDashboardHeader";
+import Footer from "../components/Footer.js";
 import "./Dashboard.css";
 import "./Home.css";
 
@@ -10,8 +12,9 @@ export default function Dashboard() {
   // console.log(Parse.User.current().getUsername());
 
   const [Email, setEmail] = useState(Parse.User.current().getUsername());
+  
   const [Password, setPassword] = useState("aaaa");
- 
+
   const [favoriteFoods, setFoods] = useState([]);
   const [newEmail, setNEmail] = useState("");
   const [newPassword, setNPassword] = useState("");
@@ -64,49 +67,71 @@ export default function Dashboard() {
     );
    }
   
-  useEffect(() => {
+  // useEffect(() => {
       
-    const favorits = Parse.Object.extend("Favorit");
+  //   const favorits = Parse.Object.extend("Favorit");
 
-    const query = new Parse.Query(favorits);
+  //   const query = new Parse.Query(favorits);
 
-    query.equalTo("username", Parse.User.current().getUsername());
+  //   query.equalTo("username", Parse.User.current().getUsername());
 
-    query.find().then((resp) => {
+  //   query.find().then((resp) => {
       
-      const fd = resp.map((x) => {
+  //     const fd = resp.map((x) => {
         
+  //       const food = x.get("food");
+  //       return {
+  //           Name : food.name,
+  //           Link : food.Link,
+  //           Ingredients : food.Ingredients,
+  //           src:food.imagesrc,
+  //           id:x.id
+  //        }
         
-        const food = x.get("food");
+  //     });
+  //     setFoods(fd);
       
-        return {
-            Name : food.Name,
-            link : food.link,
-            Ingredients : food.Ingredients,
-            src:food.imagesrc,
-            id:x.id
-         }
-        
-      });
-      setFoods(fd);
-      
-    });
+  //   });
 
-  }, []);
+  // }, []);
 
 
   return (
     <div className="Dashboard">
-      <h1 style={{ paddingTop: "10%" }}>It's User Dashboard</h1>
-      <div className="dashboard-nav container">
+      <UserDashboardHeader />
+
+      <div className="dashboard-nav container" style={{ marginTop: "5%" }}>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-4 mt-3">
             <Accordion defaultActiveKey="0">
               <Card>
-                <Accordion.Toggle as={Card.Header} eventKey="0">
-                  ایمیل
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="0"
+                  className="inline-block"
+                >
+                  <i className="fa fa-user ml-2"></i>
+                  مشخصات کاربری
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <div className="col-md-6 pt-3">
+                      <h6>آدرس ایمیل شما: </h6>
+                      <p>{Email}</p>
+                    </div>
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="1"
+                  className="inline-block"
+                >
+                  <i className="fa fa-edit ml-2"></i>
+                  تغییر ایمیل
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
                   <Card.Body>
                     <div className="col-md-6 pt-3">
                       <h6>آدرس ایمیل شما: </h6>
@@ -142,8 +167,14 @@ export default function Dashboard() {
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
+
               <Card>
-                <Accordion.Toggle as={Card.Header} eventKey="2">
+                <Accordion.Toggle
+                  as={Card.Header}
+                  eventKey="2"
+                  className="inline-block"
+                >
+                  <i className="fa fa-key ml-2"></i>
                   تغییر رمز عبور
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="2">
@@ -197,8 +228,10 @@ export default function Dashboard() {
               </Card>
             </Accordion>
           </div>
-          <div className="col-md-8">
-            <h4>غذاهای محبوب شما</h4>
+          <div className="col-md-8 ">
+            <h4 style={{ color: "black", marginBottom: "20px" }}>
+              بخش غذاهای محبوب شما
+            </h4>
             <div
               className="container row"
               style={{ marginRight: "auto", marginLeft: "auto" }}
@@ -213,7 +246,7 @@ export default function Dashboard() {
                       height: "auto",
                     }}
                   >
-                    <img  alt="" src={food.src} />
+                    <img alt="" src={food.src} />
 
                     <div className="box-content">
                       <h3 className="title">{food.Name}</h3>
@@ -221,14 +254,16 @@ export default function Dashboard() {
                     </div>
                     <ul className="icon">
                       <li>
-                        <button onClick={function(){
-                          handelremove(index);
-                        }}>
+                        <button
+                          onClick={function () {
+                            handelremove(index);
+                          }}
+                        >
                           <i className="fa fa-minus"></i>
                         </button>
                       </li>
                       <li>
-                        <a href={food.link}>
+                        <a href={food.Link}>
                           <i className="fa fa-link"></i>
                         </a>
                       </li>
@@ -240,6 +275,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

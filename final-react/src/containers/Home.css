@@ -27,6 +27,35 @@
   font-size: medium;
 }
 
+.Search-header {
+  background-image: url("../img/header-search.jpg");
+  background-size: cover;
+  height: 70vh;
+  color: white;
+  text-align: right;
+  line-height: 1.8;
+  margin: auto;
+}
+
+.Search-header p {
+  padding-top: 5%;
+  font-size: medium;
+}
+
+.Dashboard-header {
+  background-image: url("../img/dashboard-header.jpg");
+  background-size: cover;
+  height: 70vh;
+  color: white;
+  text-align: right;
+  line-height: 1.8;
+}
+
+.Dashboard-header p {
+  padding-top: 5%;
+  font-size: medium;
+}
+
 p {
   padding: 10px;
 }
@@ -150,6 +179,12 @@ p {
   opacity: 0;
   transition: all 0.4s ease 0.5s;
 }
+.box .icon li {
+  margin: 0 3px;
+  display: inline-block;
+  opacity: 0;
+  transition: all 0.4s ease 0.5s;
+}
 .box .icon li:nth-child(2) {
   transition-delay: 0.7s;
 }
@@ -169,6 +204,21 @@ p {
   transition: all 0.3s ease 0s;
 }
 .box .icon li a:hover {
+  box-shadow: 3px 3px rgba(255, 255, 255, 0.5);
+}
+.box .icon li button {
+  color: #333;
+  background-color: #fff;
+  font-size: 13px;
+  text-align: center;
+  line-height: 31px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: block;
+  transition: all 0.3s ease 0s;
+}
+.box .icon li button:hover {
   box-shadow: 3px 3px rgba(255, 255, 255, 0.5);
 }
 .footer {

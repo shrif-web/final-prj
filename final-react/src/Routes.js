@@ -28,9 +28,12 @@ export default function Routes() {
       <UnauthenticatedRoute exact path="/signup">
         <Signup />
       </UnauthenticatedRoute>
-      <AuthenticatedRoute exact path="/dashboard">
+      {/* <AuthenticatedRoute exact path="/dashboard">
         <Dashboard />
-      </AuthenticatedRoute>
+      </AuthenticatedRoute> */}
+      <Route exact path="/dashboard">
+      <Dashboard />
+      </Route>
     </Switch>
   );
 }

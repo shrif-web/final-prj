@@ -57,8 +57,15 @@ export default function Login() {
         </div>
       ))}
 
-      <div style={{ marginTop: "15vh", width: "auto" }}>
-        <Form onSubmit={handleSubmit} style={{ backgroundColor: "white" }}>
+<div style={{ marginTop: "15vh", width: "auto" }}>
+        <Form
+          onSubmit={handleSubmit}
+          style={{
+            backgroundColor: "white",
+            borderRadius: "20px",
+            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+          }}
+        >
           <Form.Group size="xl" controlId="username">
             <Form.Label>نام کاربری</Form.Label>
             <Form.Control
