@@ -32,22 +32,23 @@ export default function TopDishes() {
     
         
       });
-      var len = scores.length
-      var sorted_score = []
-      sorted_score = scores.sort()
-      // var first = scores.findIndex(sorted_score[len-1])
-      // var second = scores.findIndex(sorted_score[len-2])
-      // var  third = scores.findIndex(sorted_score[len-3])
-      console.log(sorted_score[0]);
+      var len = scores.length;
+      var sorted_score = [];
+      sorted_score = scores.sort(function(a,b){return b-a});
+      var first = scores.indexOf(sorted_score[0])
+      var second = scores.indexOf(sorted_score[1])
+      var  third = scores.indexOf(sorted_score[2])
+      console.log((sorted_score[1]));
 
-      // tops.push([
-      //   {Name : names[first] , Link:links[first] , Ingredients : Ingrdints[first] , src:srcs[first]},
-      //   {Name : names[second] , Link:links[second] , Ingredients : Ingrdints[second] , src:srcs[second]},
-      //   {Name : names[third] , Link:links[third] , Ingredients : Ingrdints[third] , src:srcs[third]},
+
+      setFoods([
+        {Name : names[first] , Link:links[first] , Ingredients : Ingrdints[first] , src:srcs[first]},
+        {Name : names[second] , Link:links[second] , Ingredients : Ingrdints[second] , src:srcs[second]},
+        {Name : names[third] , Link:links[third] , Ingredients : Ingrdints[third] , src:srcs[third]
+        },
 
         
-      // ])
-      // setFoods(tops);
+      ]);
       
     });
 
