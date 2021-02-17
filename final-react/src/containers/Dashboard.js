@@ -83,14 +83,15 @@ export default function Dashboard() {
       var relation = food.relation("ingredients");
       var query = new Parse.Query("Ingredient");
       query.containedIn("name",nFoodIngredients);
-      alert("start");
+      // alert("start");
       // var results = await query.find();
       query.find().then(results => {
-        alert("res -> ",results.length);
+        // alert("res -> ",results.length);
         relation.add(results);
         food.save().then(
           results => {
-            alert("food saved! ");
+            // alert("food saved! ");
+            window.location.reload();
             
         }).catch(error2 => {
             alert(error2);
@@ -106,7 +107,8 @@ export default function Dashboard() {
     } catch (error) {
       alert("error ---> ",error.message);
     }
-    alert("New food created");
+    // alert("New food created");
+    // window.location.reload();
   }
 
   function validateNewFood() {
@@ -190,7 +192,10 @@ export default function Dashboard() {
               <Card.Body>
                 <Card.Body>
                   <div className="col-md-6">
-                    <Form onSubmit={handleCreateFood}>
+                    <Form 
+                    onSubmit={e => {e.preventDefault();}} 
+                    // onSubmit={handleCreateFood}
+                    >
                       <Form.Group controlId="foodName" size="lg">
                         <Form.Label>نام غذا</Form.Label>
                         <Form.Control
@@ -224,18 +229,19 @@ export default function Dashboard() {
                           />
                         ))}
                       </Form.Group>
-                      <Form.Group>
+                      {/* <Form.Group>
                         <Form.File 
                         id="foodImage" 
                         label="فایل تصویر غذا"
                         onChange={onFileChange}
                          />
-                      </Form.Group>
+                      </Form.Group> */}
                       <Button
                         block
                         size="lg"
                         type="submit"
                         varient="success"
+                        onClick={handleCreateFood}
                         disabled={!validateNewFood()}
                       >
                         اضافه کردن غذا به لیست
