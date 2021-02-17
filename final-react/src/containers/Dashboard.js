@@ -11,7 +11,7 @@ export default function Dashboard() {
   }, []);
 
   async function onLoad() {
-    console.log("hi");
+
     const Ingredient = Parse.Object.extend("Ingredient");
     const query = new Parse.Query(Ingredient);
     const results = await query.find();
@@ -118,7 +118,8 @@ export default function Dashboard() {
       nFoodName.length > 0
     );
   }
-  async function handleCreateIng() {
+  async function handleCreateIng(e) {
+    e.preventDefault();
 
     try{
       const Ingredient = Parse.Object.extend("Ingredient");
@@ -126,6 +127,14 @@ export default function Dashboard() {
       ingredient.set("name", nIngName);
       ingredient.set("type", nIngCategory);
       await ingredient.save();
+
+      // setFoods([
+      //   ...foods ,
+      //   {
+      //     name : nIngName, type:nIngCategory
+      //   }
+      //  ]);
+      onLoad();
     }catch(error){
       console.log(error.message);
     }
