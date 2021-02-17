@@ -32,13 +32,11 @@ export default function TopDishes() {
     
         
       });
-      var len = scores.length;
       var sorted_score = [];
       sorted_score = scores.sort(function(a,b){return b-a});
       var first = scores.indexOf(sorted_score[0])
       var second = scores.indexOf(sorted_score[1])
       var  third = scores.indexOf(sorted_score[2])
-      console.log((sorted_score[1]));
 
 
       setFoods([
