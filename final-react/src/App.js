@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { AppContext } from "./libs/contextLib";
 import Routes from "./Routes";
 import { Navbar, Nav, Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
 import "./App.css";
 
-// var Parse = require('parse');
-// Parse.initialize("myAppId");
-// Parse.serverURL = 'http://localhost:1337/parse'
+import Parse from "./Parse.js";
 
 function App() {
+  const history = useHistory();
   const [isAuthenticated, userHasAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -26,6 +26,18 @@ function App() {
   function handleLogout() {
     Cookies.remove("user");
     userHasAuthenticated(false);
+  }
+
+  function handledashboard(){
+
+    if (Parse.User.current().get('isAdmin') ==  true)
+    {
+      
+      history.push("./dashboard");
+      return 
+    }
+
+    history.push("/user-dashboard")
   }
 
   return (
@@ -57,7 +69,7 @@ function App() {
                     variant="outline-primary"
                     className="nav-btn1"
                     size="sm"
-                    href="/dashboard"
+                    onClick={handledashboard}
                   >
                     پنل کاربری
                   </Button>

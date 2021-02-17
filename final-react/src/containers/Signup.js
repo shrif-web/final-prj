@@ -31,11 +31,23 @@ export default function Signup() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    userHasAuthenticated(true);
-    Cookies.set("user", "true");
-    history.push("/");
-    alert("Signed up and logged in");
-    //TODO
+    const user = new Parse.User();
+    user.set("password", fields.password);
+    user.set("email", fields.email);
+    user.set("username", fields.email);
+    user.set("isAdmin" , false);
+    
+
+    try {
+      await user.signUp();
+      console.log("user has been created.");
+      userHasAuthenticated(true);
+      Cookies.set("user", fields.email);
+      history.push("/");
+    } catch (error) {
+      console.log(error.message);
+      setError(["Faild!"]);
+    }
   }
 
   function handleClose() {

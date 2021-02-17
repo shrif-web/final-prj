@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useEffect ,useState } from "react";
 import { Accordion, Card, Form, Button } from "react-bootstrap";
 import "./Dashboard.css";
 import "./Home.css";
@@ -7,6 +7,7 @@ import Parse from "../Parse.js";
 
 export default function Dashboard() {
 
+  // console.log(Parse.User.current().getUsername());
 
   const [Email, setEmail] = useState(Parse.User.current().getUsername());
   const [Password, setPassword] = useState("aaaa");
@@ -33,7 +34,35 @@ export default function Dashboard() {
   function validateNewPassword() {
     return newPassword.length > 0 && Password === confirmedPassword;
   }
-   
+   function handelremove(index){
+
+    var  selected_food = "";
+
+    selected_food = favoriteFoods[index].id;
+
+    const favorits = Parse.Object.extend("Favorit");
+
+    const query = new Parse.Query(favorits);
+
+    query.get(selected_food).then(
+      (record) => {
+        record
+          .destroy()
+
+          .then(
+            (myObject) => {
+              favoriteFoods.splice(selected_food, 1);
+              setFoods([...favoriteFoods]);
+              alert("deleted");
+            },
+            (error) => {
+              alert("delete failed!");
+            }
+          );
+      },
+      (error) => {}
+    );
+   }
   
   useEffect(() => {
       
@@ -49,16 +78,16 @@ export default function Dashboard() {
         
         const food = x.get("food");
         return {
-            Name : food.Name,
+            Name : food.name,
             Link : food.Link,
             Ingredients : food.Ingredients,
-            src:food.imagesrc
+            src:food.imagesrc,
+            id:x.id
          }
+        
       });
       setFoods(fd);
-
-      console.log(fd);
-
+      
     });
 
   }, []);
@@ -190,12 +219,14 @@ export default function Dashboard() {
                     </div>
                     <ul className="icon">
                       <li>
-                        <a href="/">
+                        <button onClick={function(){
+                          handelremove(index);
+                        }}>
                           <i className="fa fa-minus"></i>
-                        </a>
+                        </button>
                       </li>
                       <li>
-                        <a href="/">
+                        <a href={food.Link}>
                           <i className="fa fa-link"></i>
                         </a>
                       </li>

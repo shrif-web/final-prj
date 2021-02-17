@@ -20,7 +20,7 @@ export default function Header() {
                 variant="outline-danger"
                 size="sm"
                 className="header-btn"
-                href="#"
+                href="/search"
                 style={{
                   backgroundColor: "#f12f2e",
                   padding: "10px",
