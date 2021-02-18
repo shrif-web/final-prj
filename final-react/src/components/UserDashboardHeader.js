@@ -19,7 +19,14 @@ export default function UserDashboardHeader() {
             height: "100%",
           }}
         >
-          <h1>پنل کاربری</h1> 
+          <h1 style={
+            {
+              textAlign:"left",
+              color:"red",
+              paddingTop:"30vh",
+              paddingRight:"85vh"
+            }
+          }>پنل کاربری</h1> 
         </div>
       </div>
     </>

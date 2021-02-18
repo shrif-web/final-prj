@@ -5,16 +5,18 @@ export default function TopDishes() {
 
 
   const [topDishes, setFoods] = useState([]);
-
+  
+  var scores = []
+  var names =[]
+  var Ingrdints =[]
+  var srcs  =[]
+  var links=[]
+  var tops=[]
   
   useEffect(() => {
     
-    var scores = []
-    var names =[]
-    var Ingrdints =[]
-    var srcs  =[]
-    var links=[]
-    var tops=[]
+    
+
     const foods = Parse.Object.extend("Food");
 
     const query = new Parse.Query(foods);
@@ -48,6 +50,7 @@ export default function TopDishes() {
         
       ]);
       
+      console.log(scores)
     });
 
   }, []);
@@ -55,19 +58,14 @@ export default function TopDishes() {
     <>
       <div className="TopDishes" style={{ marginTop: "5%" }}>
         <h2>محبوب ترین ها</h2>
-        <p>
-          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
-          ستون و سطرآنچنان که لازم است...
-        </p>
+     
 
-
-        <div className="col-md-8">
             <div
               className="container row"
               style={{ marginRight: "auto", marginLeft: "auto" }}
             >
               {topDishes.map((food, index) => (
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div
                     className="box"
                     style={{
@@ -83,13 +81,7 @@ export default function TopDishes() {
                       <span className="post">{food.Ingredients}</span>
                     </div>
                     <ul className="icon">
-                      {/* <li>
-                        <button onClick={function(){
-                          handelremove(index);
-                        }}>
-                          <i className="fa fa-minus"></i>
-                        </button>
-                      </li> */}
+                
                       <li>
                         <a href={food.Link}>
                           <i className="fa fa-link"></i>
@@ -101,8 +93,13 @@ export default function TopDishes() {
               ))}
             </div>
           </div>
-        
-        {/* <div
+       
+       
+       
+       
+       
+         
+         {/* <div
           className="container row justify-content-center "
           style={{ marginRight: "auto", marginLeft: "auto", marginTop: "5%" }}
         >
@@ -112,7 +109,7 @@ export default function TopDishes() {
                 <img alt="" src="./d1.jpg" />
 
                 <div className="box-content">
-                  <h3 className="title">Dish name</h3>
+                  <h3 className="title"></h3>
                   <span className="post">Ingredients</span>
                 </div>
                 <ul className="icon">
@@ -176,8 +173,13 @@ export default function TopDishes() {
               </div>
             </div>
           </div>
-        </div> */}
-      </div>
+        </div>   */}
+
+
+
+
+
+
     </>
   );
 }

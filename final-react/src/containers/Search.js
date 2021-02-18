@@ -61,6 +61,7 @@ export default function Search() {
 
   const [ingredients, setIngredients] = useState([]);
   
+  const [foodObjects,setFoodObjects]=useState([]);
 
   function onIngredientChange(e, name) {
     if (searchIngs.includes(name)) {
@@ -73,7 +74,7 @@ export default function Search() {
     }
   }
 
-  async function handleSearchByName() {
+  async function handleSearchByName(e) {
     // async function handleSubmit(event){
     // event.preventDefualt();
     // alert("start");
@@ -94,14 +95,16 @@ export default function Search() {
       mstr=mstr+' - '+ingredients2[j].get("name");
     }
     mstr = mstr.substring(2,mstr.length);
-
+    setFoodObjects([results[0]])
     // try{
     setFoods([{
       Name: results[0].get("name"),
       link: results[0].get("link"),
       Ingredients: mstr,
-      src: "./d3.jpg",}]);
-    
+      src: results[0].get('imagesrc'),
+      score:results[0].get("score")}
+    ]);
+
   }
 
   async function handleSearchByCheck() {
@@ -135,18 +138,16 @@ export default function Search() {
         Name: res[i].get("name"),
         link: res[i].get("link"),
         Ingredients: mstr,
-        src: "./d3.jpg"});
+        src: res[i].get('imagesrc'),
+        score:res[i].get("score")});
       
   
       console.log(res);
 
       }
+      setFoodObjects(res);
     }
-      // innerQuery.exists("image");
-
-      // query.matchesQuery("post", innerQuery);
-      // // comments now contains the comments for posts with images.
-      // const comments = await query.find();
+     
       setFoods(foods);
   }
 
@@ -158,6 +159,22 @@ export default function Search() {
     return searchIngs.length > 0;
   }
 
+  function addtofavorit(idx){
+
+    const f = foodObjects[idx];
+    const new_score = f.get('score') +1;
+    f.set('score',new_score);
+    f.save();
+
+    const favorit = Parse.Object.extend("Favorit");
+    var fav = new favorit();
+    fav.set("username",Parse.User.current().getUsername());
+    fav.set("food" , resultFoods[idx]);
+    fav.save();
+
+
+
+  }
   return (
     <div className="Search container-fluid">
       <SearchHeader />
@@ -182,11 +199,46 @@ export default function Search() {
           >
             غذاهای مناسب برای شما
           </h2>
+          <div className="row container" style={{marginTop:"10%", marginRight:"auto", marginLeft:"auto", paddingBottom:"10%"}}>
+      {resultFoods.map((food, index) => (
+                <div className="col-md-4">
+                  <div
+                    className="box"
+                    style={{
+                      width: "100%",
+                      marginBottom: "30px",
+                      height: "auto",
+                    }}
+                  >
+                    <img alt="" src={food.src} />
+
+                    <div className="box-content">
+                      <h3 className="title">{food.Name}</h3>
+                      <span className="post">{food.Ingredients}</span>
+                    </div>
+                    <ul className="icon">
+                      <li>
+                        <button  onClick={function(){
+                          addtofavorit(index)
+                        }}>
+                          <i className="fa fa-heart"></i>
+                        </button>
+                      </li>
+                      <li>
+                        <a href={food.link}>
+                          <i className="fa fa-link"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              ))}
+      </div>
         </div>
 
         <div className="col-md-4">
           <Form
-            onSubmit={handleSearchByName}
+            onSubmit={e => {e.preventDefault();}}
             style={{
               textAlign: "center",
               backgroundColor: "white",
@@ -213,12 +265,13 @@ export default function Search() {
               type="submit"
               varient="success"
               disabled={!validateForm()}
+              onClick={handleSearchByName}
             >
               جست و جو
             </Button>
           </Form>{" "}
           <Form
-            onSubmit={handleSearchByCheck}
+            onSubmit={e => {e.preventDefault();}}
             style={{
               backgroundColor: "white",
               borderRadius: "20px",
@@ -260,6 +313,7 @@ export default function Search() {
               varient="success"
               style={{ marginTop: "5px" }}
               disabled={!validateForm2()}
+              onClick={handleSearchByCheck}
             >
               جست و جو
             </Button>

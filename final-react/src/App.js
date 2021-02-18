@@ -26,19 +26,20 @@ function App() {
   function handleLogout() {
     Cookies.remove("user");
     userHasAuthenticated(false);
+    Parse.User.logOut();
   }
 
   function handledashboard(){
-    //here
 
-    // if (Parse.User.current().get('isAdmin') ==  true)
-    // {
+    console.log("test");
+    if (Parse.User.current().get('isAdmin') ==  true)
+    {
       
-    //   history.push("./dashboard");
-    //   return 
-    // }
+      history.push("./dashboard");
+      return 
+    }
 
-    // history.push("/user-dashboard")
+    history.push("/user-dashboard")
   }
 
   return (

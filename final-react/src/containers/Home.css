@@ -43,9 +43,9 @@
 }
 
 .Dashboard-header {
-  background-image: url("../img/dashboard-header.jpg");
+  background-image: url("../img/user-dash-header.jpeg");
   background-size: cover;
-  height: 70vh;
+  height: 50vh;
   color: white;
   text-align: right;
   line-height: 1.8;

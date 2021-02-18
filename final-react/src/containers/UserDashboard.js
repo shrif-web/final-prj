@@ -15,6 +15,7 @@ export default function Dashboard() {
   
   const [Password, setPassword] = useState("aaaa");
 
+  const [checkPassword, setCheckPassword] = useState("");
   const [favoriteFoods, setFoods] = useState([]);
   const [newEmail, setNEmail] = useState("");
   const [newPassword, setNPassword] = useState("");
@@ -22,6 +23,11 @@ export default function Dashboard() {
 
   function handleChangeEmail() {
     setEmail(newEmail);
+
+    const Current = Parse.User.current();
+    Current.set("email",newEmail);
+    Current.set("username",newEmail);
+    Current.save();
     alert("Email updated");
   }
 
@@ -35,7 +41,7 @@ export default function Dashboard() {
   }
 
   function validateNewPassword() {
-    return newPassword.length > 0 && Password === confirmedPassword;
+    return newPassword.length > 0 && Password === checkPassword && newPassword=== confirmedPassword;
   }
    function handelremove(index){
 
@@ -67,33 +73,33 @@ export default function Dashboard() {
     );
    }
   
-  // useEffect(() => {
+  useEffect(() => {
       
-  //   const favorits = Parse.Object.extend("Favorit");
+    const favorits = Parse.Object.extend("Favorit");
 
-  //   const query = new Parse.Query(favorits);
+    const query = new Parse.Query(favorits);
 
-  //   query.equalTo("username", Parse.User.current().getUsername());
+    query.equalTo("username", Parse.User.current().getUsername());
 
-  //   query.find().then((resp) => {
+    query.find().then((resp) => {
       
-  //     const fd = resp.map((x) => {
+      const fd = resp.map((x) => {
         
-  //       const food = x.get("food");
-  //       return {
-  //           Name : food.name,
-  //           Link : food.Link,
-  //           Ingredients : food.Ingredients,
-  //           src:food.imagesrc,
-  //           id:x.id
-  //        }
+        const food = x.get("food");
+        return {
+            Name : food.name,
+            Link : food.Link,
+            Ingredients : food.Ingredients,
+            src:food.src,
+            id:x.id
+         }
         
-  //     });
-  //     setFoods(fd);
+      });
+      setFoods(fd);
       
-  //   });
+    });
 
-  // }, []);
+  }, []);
 
 
   return (
@@ -151,7 +157,7 @@ export default function Dashboard() {
                           autoFocus
                           type="email"
                           value={newEmail}
-                          onChange={setNEmail}
+                          onChange={(e) => setNEmail(e.target.value)}
                         />
                       </Form.Group>
                       <Button
@@ -191,8 +197,8 @@ export default function Dashboard() {
                           <Form.Control
                             autoFocus
                             type="text"
-                            value={newPassword}
-                            onChange={setNPassword}
+                            value={checkPassword}
+                            onChange={(e) => setCheckPassword(e.target.value)}
                           />
                         </Form.Group>
                         <Form.Group controlId="newPassword" size="lg">
@@ -201,7 +207,8 @@ export default function Dashboard() {
                             autoFocus
                             type="password"
                             value={newPassword}
-                            onChange={setNPassword}
+                            onChange={(e) => setNPassword(e.target.value)}
+                            
                           />
                         </Form.Group>
                         <Form.Group controlId="confirmPassword" size="lg">
@@ -209,7 +216,8 @@ export default function Dashboard() {
                           <Form.Control
                             type="password"
                             value={confirmedPassword}
-                            onChange={setCPassword}
+                            onChange={(e) => setCPassword(e.target.value)}
+                            
                           />
                         </Form.Group>
                         <Button
